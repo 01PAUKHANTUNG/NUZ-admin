@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+section dev p{
+    color: red;
+}
