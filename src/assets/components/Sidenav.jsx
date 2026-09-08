@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import logo from '../../../public/logo.jpg'
+import logo from '../../assets/logo.jpg'
 import upload from '../../assets/upload.png'
 import assignment from '../../assets/assignment.png'
 import reading from '../../assets/reading.png'

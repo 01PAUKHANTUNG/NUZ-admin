@@ -5,10 +5,12 @@ import { Route, Routes } from "react-router";
 import VideoUpload from "./assets/components/VideoUpload";
 import Assignment from "./assets/components/Assignment";
 import StudentMag from "./assets/components/StudentMag";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
     <div className="min-h-screen">
+      <ToastContainer />
       
       {/* Side Navigation */}
       <aside className="fixed left-0 top-0 h-screen border-r-2 00 w-64">
