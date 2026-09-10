@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import plus from '../../assets/plus.png'
 import { AdminNuZContext } from '../context/NuZContext';
 import axios from 'axios';
@@ -8,24 +8,32 @@ const StudentMag = () => {
   const [studeneAdd, setAddStudent] = useState(false);
   const {allStudent, backendUrl, getStudentAccess} = useContext(AdminNuZContext);
 
-  const filterMPAStudent = allStudent.filter((student)=> student.studentID.slice(2, 5) === "MPA")
-  const filterLLBStudent = allStudent.filter((student)=> student.studentID.slice(2, 5) === "LLB")
-  const filterCSSSStudent = allStudent.filter((student)=> student.studentID.slice(2, 6) === "DSSS")
+  const filterMPAStudent = allStudent.filter((student)=> student.studentID.slice(2, 5) === "MPA");
+  const filterLLBStudent = allStudent.filter((student)=> student.studentID.slice(2, 5) === "LLB");
+  const filterCSSSStudent = allStudent.filter((student)=> student.studentID.slice(2, 6) === "DSSS");
 
   const [studentID, setStudentID] = useState('');
   const [password, setPassword] = useState('');
+  const course = studentID.slice(2);
 
   const onSubmitHandle = async (e)=>{
     e.preventDefault();
 
-     const response = await axios.post(backendUrl + '/api/student/add',{studentID, password});
-     if(response.data.success){
-      toast.info(response.data.message);
-      setStudentID('');
-      setPassword('');
-     }
-     await getStudentAccess();
+    if(course.startsWith("MPA") || course.startsWith("LLB") || course.startsWith("DSSS")) {
+        const response = await axios.post(backendUrl + '/api/student/add',{studentID, password});
+        if(response.data.success){
+          toast.success(response.data.message);
+          setStudentID('');
+          setPassword('');
+        }
+        await getStudentAccess();
+   }else{
+      toast.error("Giving student ID is wrong!")
+      return;
+    }
   }
+
+ 
 
   const deleteStudent = async(_id)=>{
      
@@ -35,6 +43,10 @@ const StudentMag = () => {
         }
          await getStudentAccess();
      }
+
+      useEffect(()=>{
+          getStudentAccess();
+    },[])
 
   return (
     <div>
@@ -110,7 +122,7 @@ const StudentMag = () => {
                   filterLLBStudent.map((item, index)=>{
                       return(
                         <div key={index} className='flex '>
-                            <p>{index +1 }</p>
+                            
                             <p className='w-[150px]'>{item.studentID}</p>
                             <p className='w-[100px]'>{item.password}</p>
                             <p onClick={()=>deleteStudent(item._id)} className='w-[40px] cursor-pointer text-red-400 font-bold hover:text-red-500 active:text-red-600 rounded-sm'> Remove </p>
@@ -134,7 +146,7 @@ const StudentMag = () => {
                  filterCSSSStudent.map((item, index)=>{
                   return(
                     <div key={index} className='flex '>
-                        <p>{index +1 }</p>
+                       
                         <p className='w-[150px]'>{item.studentID}</p>
                         <p className='w-[100px]'>{item.password}</p>
                         <p onClick={()=>deleteStudent(item._id)} className='w-[40px] cursor-pointer text-red-400 font-bold hover:text-red-500 active:text-red-600 rounded-sm'> Remove </p>
